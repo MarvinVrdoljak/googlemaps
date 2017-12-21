@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Google Maps Test</title>
+
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+
+</head>
+<body>
+<h3>My Google Maps Demo | Multi</h3>
+<div id="map"></div>
+<script>
+    function initMap() {
+        //Location
+        var mySingleLocation = {lat: 47.3769, lng: 8.5417}; //
+
+        //Map Options
+        var options = {
+            zoom: 13,
+            center: mySingleLocation
+        };
+
+        //Init Map
+        var map = new google.maps.Map(document.getElementById('map'), options);
+
+        //Array of Markers
+        var markers = [
+            {
+                coords: {lat: 47.36952, lng: 8.52685},
+                icon: 'location_02.png',
+                content: 'Manessestrasse'
+            },
+            {
+                coords: {lat: 47.3730, lng: 8.5349},
+                icon: 'location_01.png',
+                content: 'Farner'
+            }
+        ];
+
+        // Loop through Markers
+        for(var i = 0; i < markers.length;i++){
+            addMarker(markers[i]);
+        }
+
+        //Add Markers
+        function addMarker(props) {
+            var marker = new google.maps.Marker({
+                position: props.coords,
+                map: map
+            });
+
+            // Check if Icon exists
+            if (props.icon) {
+                //set Icon
+                marker.setIcon(props.icon);
+            }
+
+            // Check if Icon exists
+            if (props.content){
+                var infoWindow = new google.maps.InfoWindow({
+                    content: props.content
+                });
+            }
+
+            marker.addListener('click', function(){
+                infoWindow.open(map, marker);
+            });
+
+        }
+
+    }
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsm8sjiU9JAfnxnFFO5Jq7MsgNoGcvT7w&callback=initMap"></script>
+</body>
+</html>

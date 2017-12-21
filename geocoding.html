@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Google Maps Test</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+</head>
+<body>
+<h1>My Google Maps Demo</h1>
+<a href="https://developers.google.com/maps/documentation/geocoding/intro" target="_blank">Hilfe</a>
+<a href="https://www.youtube.com/watch?v=pRiQeo17u6c&t=958s" target="_blank">YouTube Tutorial</a>
+
+<h2>Response:</h2>
+<div id="formatted-address"></div>
+<div id="formatted-components"></div>
+
+<script>
+    geocode();
+
+    function geocode(){
+        // Address that's searched for
+        var location = 'Mannessestrasse 8 Zürich';
+        axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+            params:{
+                address: location,
+                key: 'AIzaSyDsm8sjiU9JAfnxnFFO5Jq7MsgNoGcvT7w'
+
+            }
+        })
+            .then(function(response){
+                // response of the search
+                console.log(response);
+                console.log(response.data.results[0].formatted_address);
+                console.log(response.data.results[0].geometry.location.lng);
+
+                var formattedAddress = response.data.results[0].formatted_address;
+                var formattedAddressOutput = `Adresse: ${formattedAddress}`;
+
+                var addressComponents = response.data.results[0].address_components;
+                var addressComponentsOutput = '<ul class="list-group">';
+                for (var i = 0; i < addressComponents.length; i++){
+                    addressComponentsOutput += `<li class="list-group-item"><strong>${addressComponents[i].types[0]}</strong>: ${addressComponents[i].long_name}</li>`
+                }
+                addressComponentsOutput += '</ul>';
+
+                document.getElementById('formatted-address').innerHTML = formattedAddressOutput;
+                document.getElementById('formatted-components').innerHTML = addressComponentsOutput;
+            })
+
+            .catch(function(error){
+                console.log(error);
+            })
+    }
+
+</script>
+</body>
+</html>
