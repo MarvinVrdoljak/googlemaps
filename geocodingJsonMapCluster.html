@@ -64,7 +64,10 @@
                 // push lat and lng into jsonFile
                 $.extend(jsonFile[i], latlng);
 
+                //Count for all Geocodes
                 countGeocodes++;
+
+                //If counted all Geocodes set allGeocodes on true
                 if (countGeocodes === jsonFileLength) {
                     allGeocodes = true;
                 }
@@ -91,33 +94,37 @@
 
     function addMarkers(file, i) {
 
+        //Output Object if all Geocodes are generated
         if (allGeocodes === true) {
+            var markers = jsonFile.map(function(file, i) {
+                console.log(file);
+                var marker = new google.maps.Marker({
+                    position: {lat: file.lat, lng: file.lng},
+                    icon: 'img/location_02.png'
+                });
+                var infoWindow = new google.maps.InfoWindow({
+                    maxWidth: 350,
+                    content: '<div class="test">'+ file.name + '<br/>' +
+                    file.street + '<br/>' +
+                    file.zip + ' ' + file.city + '<br/>' +
+                    '</div>'
+                });
+                google.maps.event.addListener(marker, 'click', function(evt) {
+                    infoWindow.open(map, marker);
+                });
+                return marker;
+            });
+
+
+            var markerCluster = new MarkerClusterer(map, markers,
+                {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+
             document.getElementById('theStringObject').innerHTML += JSON.stringify(file);
         }
-
-        var marker = new google.maps.Marker({
-            position: {lat: file[i].lat, lng: file[i].lng},
-            icon: 'img/location_02.png',
-            map: map
-        });
-
-        var infoWindow = new google.maps.InfoWindow({
-            maxWidth: 350,
-            content: '<div class="test">'+ file[i].name + '<br/>' +
-            file[i].street + '<br/>' +
-            file[i].zip + ' ' + file[i].city + '<br/>' +
-            '</div>'
-        });
-
-        marker.addListener('click', function(){
-            // infoWindow.close();
-            infoWindow.open(map, marker);
-        });
     }
 </script>
-<script>
-
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsm8sjiU9JAfnxnFFO5Jq7MsgNoGcvT7w&callback=initMap">
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsm8sjiU9JAfnxnFFO5Jq7MsgNoGcvT7w&callback=initMap"></script>
 </body>
 </html>

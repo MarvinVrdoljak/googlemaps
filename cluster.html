@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Google Maps Test</title>
+
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+
+</head>
+<body>
+<div id="map"></div>
+<script>
+
+    function initMap() {
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 3,
+            center: {lat: 47.3769, lng: 8.5417}
+    });
+
+        var blub = locations.map(function(location, i) {
+            console.log(i);
+            return new google.maps.Marker({
+                position: {lat: location.coords.lat, lng: location.coords.lng},
+                title: 'blub'
+            });
+        });
+
+
+        // Add a marker clusterer to manage the markers.
+        var markerCluster = new MarkerClusterer(map, blub,
+            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    }
+    var locations = [
+        {
+            coords: {lat: 47.36952, lng: 8.52685},
+            icon: 'img/location_02.png',
+            content: 'Manessestrasse'
+        },
+        {
+            coords: {lat: 47.3730, lng: 8.5349},
+            icon: 'img/location_01.png',
+            content: 'Farner'
+        }
+    ]
+</script>
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsm8sjiU9JAfnxnFFO5Jq7MsgNoGcvT7w&callback=initMap">
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Google Maps Test</title>
+
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+
+</head>
+<body>
+<div id="map"></div>
+<script>
+
+    function initMap() {
+
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 3,
+            center: {lat: 47.3769, lng: 8.5417}
+    });
+
+        var markers = locations.map(function(location, i) {
+            console.log(location);
+            var marker = new google.maps.Marker({
+                position: {lat: location.coords.lat, lng: location.coords.lng}
+            });
+            var infoWindow = new google.maps.InfoWindow({
+                maxWidth: 350,
+                content: '<div class="wrapper">' + location.content+ '</div>'
+            });
+            google.maps.event.addListener(marker, 'click', function(evt) {
+                infoWindow.open(map, marker);
+            });
+            return marker;
+        });
+
+        var markerCluster = new MarkerClusterer(map, markers,
+            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    }
+
+
+    var locations = [
+        {
+            coords: {lat: 47.36952, lng: 8.52685},
+            icon: 'img/location_02.png',
+            content: 'Manessestrasse'
+        },
+        {
+            coords: {lat: 47.3730, lng: 8.5349},
+            icon: 'img/location_01.png',
+            content: 'Farner'
+        }
+    ]
+</script>
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsm8sjiU9JAfnxnFFO5Jq7MsgNoGcvT7w&callback=initMap">
+</script>
+</body>
+</html>
