@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Marvin",
+    "street": "Manessestrase 8",
+    "city": "Zürich",
+    "zip": 8003,
+    "country": "switzerland"
+  },
+  {
+    "name": "Farner",
+    "street": "Löwenstrasse 2",
+    "city": "Zürich ",
+    "zip": 8001,
+    "country": "Switzerland"
+  },
+  {
+    "name": "Pero",
+    "street": "Wilhelm-Wagenfeld-Straße 16",
+    "city": "Emsdetten",
+    "zip": 48282,
+    "country": "Deutschland"
+  },
+  {
+    "name": "Kai",
+    "street": "Stresemannstrasse 22",
+    "city": "Düsseldorf",
+    "zip": 40210,
+    "country": "Deutschland"
+  }
+]

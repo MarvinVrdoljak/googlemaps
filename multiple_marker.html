@@ -13,12 +13,12 @@
 
 </head>
 <body>
-<h3>My Google Maps Demo | Multi</h3>
+<h3>Multi Marker</h3>
 <div id="map"></div>
 <script>
     function initMap() {
         //Location
-        var mySingleLocation = {lat: 47.3769, lng: 8.5417}; //
+        var mySingleLocation = {lat: 47.3769, lng: 8.5417}; // Set middle of the Map
 
         //Map Options
         var options = {
@@ -33,12 +33,12 @@
         var markers = [
             {
                 coords: {lat: 47.36952, lng: 8.52685},
-                icon: 'location_02.png',
+                icon: 'img/location_02.png',
                 content: 'Manessestrasse'
             },
             {
                 coords: {lat: 47.3730, lng: 8.5349},
-                icon: 'location_01.png',
+                icon: 'img/location_01.png',
                 content: 'Farner'
             }
         ];
@@ -61,7 +61,7 @@
                 marker.setIcon(props.icon);
             }
 
-            // Check if Icon exists
+            // Check if Content exists
             if (props.content){
                 var infoWindow = new google.maps.InfoWindow({
                     content: props.content

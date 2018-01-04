@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Google Maps Test</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<h1>Get Geo Coords in Map & JSON</h1>
+<p>Diese Demo pullt die Adressen auas dem JSON File, GEOCODED diese (um lat und lng zu erhalten) und setzt danach den
+    Pin auf der Map.</p>
+<p>Convert Excel file into JSON: <a href="http://www.convertcsv.com/csv-to-json.htm" target="_blank">hier</a></p>
+<div id="map"></div>
+
+<h2>Object mit Lat und Lng:</h2>
+<div id="theStringObject"></div>
+
+<script>
+
+    var jsonFile,
+        jsonFileLength,
+        map,
+        countGeocodes = 0,
+        allGeocodes = false;
+
+    // JSON Addresses that's searched for
+    axios.get('./json/addresses.json')
+        .then(function (response) {
+            jsonFile = response.data;
+            jsonFileLength = response.data.length;
+            for (var i = 0; i < jsonFileLength; i++) {
+                address = response.data[i].street + ' ' + response.data[i].city + ' ' + response.data[i].country;
+                geocode(address, i);
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+
+    function geocode(location, i) {
+        // Address that's searched for
+        axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+            params: {
+                address: location,
+                key: 'AIzaSyDsm8sjiU9JAfnxnFFO5Jq7MsgNoGcvT7w'
+            }
+        })
+            .then(function (response) {
+                // response of the search
+                var latlng = {
+                    lat: response.data.results[0].geometry.location.lat,
+                    lng: response.data.results[0].geometry.location.lng
+                };
+
+                // push lat and lng into jsonFile
+                $.extend(jsonFile[i], latlng);
+
+                countGeocodes++;
+                if (countGeocodes === jsonFileLength) {
+                    allGeocodes = true;
+                }
+                addMarkers(jsonFile, i, allGeocodes);
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+    }
+
+    function initMap() {
+        //Location
+        var mySingleLocation = {lat: 47.3769, lng: 8.5417}; // Set middle of the Map
+
+        //Map Options
+        var options = {
+            zoom: 5,
+            center: mySingleLocation
+        };
+
+        //Init Map
+        map = new google.maps.Map(document.getElementById('map'), options);
+    }
+
+    function addMarkers(file, i) {
+
+        if (allGeocodes === true) {
+            document.getElementById('theStringObject').innerHTML += JSON.stringify(file);
+        }
+
+        var marker = new google.maps.Marker({
+            position: {lat: file[i].lat, lng: file[i].lng},
+            icon: 'img/location_02.png',
+            map: map
+        });
+
+        var infoWindow = new google.maps.InfoWindow({
+            maxWidth: 350,
+            content: '<div class="test">'+ file[i].name + '<br/>' +
+            file[i].street + '<br/>' +
+            file[i].zip + ' ' + file[i].city + '<br/>' +
+            '</div>'
+        });
+
+        marker.addListener('click', function(){
+            // infoWindow.close();
+            infoWindow.open(map, marker);
+        });
+    }
+</script>
+<script>
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsm8sjiU9JAfnxnFFO5Jq7MsgNoGcvT7w&callback=initMap"></script>
+</body>
+</html>
